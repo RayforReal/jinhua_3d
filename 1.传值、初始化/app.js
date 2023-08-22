@@ -1,4 +1,4 @@
-import initShaders from './initShaders.js';
+import initShaders from '../initShaders.js';
 
 const canvas = document.getElementById('canvas');
 const gl = canvas.getContext('webgl');
