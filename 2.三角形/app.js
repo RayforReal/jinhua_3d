@@ -73,3 +73,7 @@ gl.enableVertexAttribArray(a_color)
 // 回执三角形
 gl.drawArrays(gl.TRIANGLES, 0, 3)
 
+
+/**
+ * webgl
+ */
