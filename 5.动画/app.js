@@ -28,9 +28,9 @@ initShaders(gl, vertexShader, fragmentShader)
 function initVertexBuffer(gl) {
     // 顶点数据
     const vertices = new Float32Array([
-        -0.6, -0.6,
+        -0.3, -0.6,
         0.6, -0.6,
-        0.0, 0.6,
+        0.0, 0.8,
     ])
     const F_SIZE = vertices.BYTES_PER_ELEMENT
     /**
@@ -73,8 +73,8 @@ let speed_x = 0.01, speed_y = 0.02;
 function tick() {
     tx += speed_x;
     ty += speed_y;
-    if (tx > 0.4 || tx < -0.4) speed_x *= -1;
-    if (ty > 0.4 || ty < -0.4) speed_y *= -1;
+    if (tx > 0.4 || tx < -0.7) speed_x *= -1;
+    if (ty > 0.2 || ty < -0.4) speed_y *= -1;
     const u_translate = gl.getUniformLocation(gl.program, 'u_translate');
     gl.uniform4f(u_translate, tx, ty, 0.0, 0.0)
     draw();
