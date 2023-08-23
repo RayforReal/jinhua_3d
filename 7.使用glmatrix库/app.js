@@ -1,5 +1,5 @@
 import initShaders from '../initShaders.js';
-import { mat4 } from '../gl_matrix/esm/index.js';
+import { mat4, vec3 } from '../gl_matrix/esm/index.js';
 
 const canvas = document.getElementById('canvas');
 const gl = canvas.getContext('webgl');
@@ -73,15 +73,19 @@ const u_matrix = gl.getUniformLocation(gl.program, 'u_matrix');
  * 旋转矩阵
  */
 const rotate_matrix = mat4.create();
-mat4.fromRotation(rotate_matrix, 90 / 180 * Math.PI, [0, 0, 1])
 
-gl.uniformMatrix4fv(u_matrix, false, rotate_matrix)
+const tick = () => {
+    mat4.rotate(rotate_matrix,rotate_matrix,5 / 180 * Math.PI, [0, 0, 1])
+    gl.uniformMatrix4fv(u_matrix, false, rotate_matrix)
+    // 清空canvas画布
+    gl.clearColor(0.0, 0.0, 0.0, 1.0)
+    gl.clear(gl.COLOR_BUFFER_BIT)
+    // 绘制三角形
+    gl.drawArrays(gl.TRIANGLES, 0, 3)
+    requestAnimationFrame(tick)
+}
+tick()
 
-// 清空canvas画布
-gl.clearColor(0.0, 0.0, 0.0, 1.0)
-gl.clear(gl.COLOR_BUFFER_BIT)
-// 绘制三角形
-gl.drawArrays(gl.TRIANGLES, 0, 3)
 
 /**
  * 变换：平移translate、旋转rotate、缩放scale
