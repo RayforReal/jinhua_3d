@@ -1,27 +1,9 @@
 import initShaders from "../initShaders.js";
+import vertexShader from "./shaders/vertexShader.js";
+import fragmentShader from "./shaders/fragmentShader.js";
 
 const canvas = document.getElementById('canvas');
 const gl = canvas.getContext('webgl');
-
-const vertexShader = `
-attribute vec3 a_position;
-attribute vec2 a_uv;
-varying vec2 v_uv;
-
-void main(){
-    v_uv=a_uv;
-    gl_Position = vec4(a_position,1.0);
-}
-`;
-const fragmentShader = `
-precision mediump float;
-varying vec2 v_uv;
-uniform sampler2D u_sampler;
-
-void main(){
-    gl_FragColor = texture2D(u_sampler,v_uv);
-}
-`;
 
 initShaders(gl, vertexShader, fragmentShader)
 
