@@ -30,19 +30,19 @@ initTextures();
 
 function initTextures() {
     const texture = gl.createTexture();
-    const u_sampler = gl.getUniformLocation(gl.program,'u_sampler');
+    const u_sampler = gl.getUniformLocation(gl.program, 'u_sampler');
 
     const image = new Image();
     image.src = '../cat_512x512.jpg';
 
-    image.onload=function (){
+    image.onload = function () {
         // 翻转图片的Y轴,默认是不翻转
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
         //激活贴图 放在第0个单元上（任何系统最少支持8个单元，机器越好越多）
         gl.activeTexture(gl.TEXTURE0);
         //绑定贴图（哪种贴图，哪个贴图）
-        gl.bindTexture(gl.TEXTURE_2D,texture)
+        gl.bindTexture(gl.TEXTURE_2D, texture)
         // 对贴图的参数进行设置gl.texParameteri(贴图的种类，参数的名称，具体值)
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
 
@@ -52,7 +52,6 @@ function initTextures() {
 
         draw()
     }
-
 }
 
 function initVertexBuffer() {
