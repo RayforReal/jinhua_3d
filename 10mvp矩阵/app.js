@@ -9,10 +9,12 @@ attribute vec3 a_position;
 attribute vec3 a_color;
 varying vec3 v_color;
 uniform mat4 a_rMatrix;
+uniform mat4 u_viewMatrix;
+uniform mat4 u_projMatrix;
 
 void main(){
     v_color=a_color;
-    gl_Position = a_rMatrix * vec4(a_position,1.0);
+    gl_Position = u_projMatrix * u_viewMatrix * vec4(a_position,1.0);
 }
 `;
 const fragmentShader = `
@@ -27,7 +29,41 @@ void main(){
 initShaders(gl, vertexShader, fragmentShader)
 initVertexBuffers();
 makeMatrix();
-draw();
+makeViewMatrix();
+
+function makeViewMatrix() {
+    const viewMatrix = mat4.create();
+    const eye = [5, 5, 5];
+    let center = [0, 0, 0]
+    let up = [0, 1, 0]
+    mat4.lookAt(viewMatrix, eye, center, up)
+    const u_viewMatrix = gl.getUniformLocation(gl.program, 'u_viewMatrix');
+    gl.uniformMatrix4fv(u_viewMatrix, false, viewMatrix);
+
+    // 投影矩阵 正交投影 Orthography
+    const projMatrix = mat4.create();
+    const u_projMatrix = gl.getUniformLocation(gl.program, 'u_projMatrix');
+    mat4.ortho(projMatrix, 1, -1, -1, 1, 0, 10)
+    gl.uniformMatrix4fv(u_projMatrix, false, projMatrix);
+
+    // 投影矩阵 透视投影 perspective
+    // const projMatrix = mat4.create();
+    // const u_projMatrix = gl.getUniformLocation(gl.program, 'u_projMatrix');
+    // mat4.perspective(projMatrix, glMatrix.toRadian(15), canvas.width/canvas.height, 0,100)
+    // gl.uniformMatrix4fv(u_projMatrix, false, projMatrix);
+
+    function tick() {
+        const time = Date.now() / 1000;
+        eye[0] = Math.sin(time)
+        eye[2] = Math.cos(time)
+        mat4.lookAt(viewMatrix, eye, center, up)
+        gl.uniformMatrix4fv(u_viewMatrix, false, viewMatrix);
+        draw();
+        requestAnimationFrame(tick)
+    }
+
+    tick()
+}
 
 function makeMatrix() {
     const rMatrix = mat4.create();
@@ -73,8 +109,8 @@ function initVertexBuffers() {
         //左
         ...v1, 0.0, 0.0, 1.0,
         ...v5, 0.0, 0.0, 1.0,
-        ...v4, 0.0, 0.0, 1.0,
         ...v8, 0.0, 0.0, 1.0,
+        ...v4, 0.0, 0.0, 1.0,
         //右
         ...v2, 0.0, 0.2, 0.2,
         ...v3, 0.0, 0.2, 0.2,
